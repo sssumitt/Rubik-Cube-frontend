@@ -1,0 +1,394 @@
+/* ==========================================================================
+   VARIABLES & BASE STYLES
+   ========================================================================== */
+:root {
+  --clr-dark: #070a13;
+  --clr-light: #f1f5f9;
+  --clr-slate400: #94a3b8;
+  --clr-slate600: #1e293b;
+  --clr-rose: #e11d48;
+  --clr-indigo: #4f46e5;
+
+  /* sizes */
+  --size-xxs: 0.5rem;
+  --size-xs: 0.75rem;
+  --size-sm: 0.875rem;
+  --size-base: 1rem;
+  --size-lg: 1.125rem;
+  --size-xl: 1.25rem;
+  --size-2xl: 1.5rem;
+  --size-3xl: 1.875rem;
+  --size-4xl: 2.25rem;
+  --size-5xl: 3rem;
+  --size-6xl: 3.75rem;
+  --size-7xl: 4.5rem;
+  --size-8xl: 6rem;
+  --size-9xl: 8rem;
+  --size-10xl: 10rem;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  line-height: calc(1em + 0.5rem);
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: "General Sans", sans-serif;
+}
+
+body {
+  background-color: var(--clr-dark);
+  color: var(--clr-light);
+}
+
+/* Utility selectors */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  user-select: none;
+}
+
+button,
+a {
+  cursor: pointer;
+}
+
+a {
+  color: var(--clr-rose);
+}
+
+strong {
+  color: var(--clr-indigo);
+}
+
+/* ==========================================================================
+   SCROLLBAR
+   ========================================================================== */
+body::-webkit-scrollbar {
+  width: 8px;
+}
+body::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
+}
+body::-webkit-scrollbar-thumb {
+  background-color: var(--clr-indigo);
+  outline: 1px solid var(--clr-indigo);
+}
+
+
+/* ==========================================================================
+   CONTAINERS & RESPONSIVE WRAPPER
+   ========================================================================== */
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding-left: 0.5rem;
+}
+@media (min-width: 475px) {
+  .container { max-width: 475px; }
+}
+@media (min-width: 640px) {
+  .container { max-width: 640px; }
+}
+@media (min-width: 768px) {
+  .container { max-width: 768px; }
+}
+@media (min-width: 1024px) {
+  .container { max-width: 1024px; }
+  .section { margin-top: 10rem; }
+}
+@media (min-width: 1280px) {
+  .container { max-width: 1280px; }
+}
+@media (min-width: 1536px) {
+  .container { max-width: 1536px; }
+}
+
+
+.form-container {
+  background-color: var(--clr-slate600);
+  padding: 1rem;
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: center;
+}
+.form-container input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background-color: #1c1c1c;
+  color: #fff;
+}
+.form-container button {
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+.btn {
+  display: inline-block;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: -0.05em;
+  background-color: var(--clr-rose);
+  color: #f1f5f9;
+  padding: 0.5em 1em;
+  border-radius: 6px;
+  transition: transform 0.2s ease-in-out;
+}
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 14px 28px rgba(225, 29, 72, 0.25),
+    0 10px 10px rgba(225, 29, 72, 0.22),
+    0 0 120px -10px var(--clr-rose);
+}
+
+
+/* ==============================
+   Cube-Size Picker “Pill” Style
+   ============================== */
+   .size-input-container {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--clr-slate600);
+    border: 1px solid var(--clr-slate400);
+    border-radius: var(--size-xl);
+    padding: 0.5rem 1rem;
+  
+    /* right-align */
+    margin: 1.5rem 0 0 auto;
+    gap: 0.75rem;
+  }
+  
+  
+  .size-input-container label {
+    font-size: var(--size-base);
+    color: var(--clr-light);
+    white-space: nowrap;
+  }
+  
+  .size-input-container input {
+    width: 3rem;
+    padding: 0.25rem 0;
+    font-size: var(--size-base);
+    text-align: center;
+  
+    background: transparent;
+    border: none;
+    color: var(--clr-light);
+  
+    /* preserve pill shape on focus */
+    outline: none;
+  }
+  
+  .size-input-container input:focus {
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.4); /* subtle indigo glow */
+  }
+  
+  /* optional hover feedback */
+  .size-input-container:hover {
+    border-color: var(--clr-light);
+  }
+  
+
+
+/* ========================================================================== 
+   CUBENETEDITOR - Responsive Face Net 
+   ========================================================================== */
+
+/* Overall Cube Editor Wrapper */
+.cube-editor {
+  margin-top: 2rem;
+}
+
+/* Container for the net */
+.container.cube-net {
+  position: relative;
+  display: grid;
+  /* 3 rows x 4 columns for the faces */
+  grid-template-rows: repeat(3, auto);
+  grid-template-columns: repeat(4, auto);
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 1rem;
+}
+
+/* Face Positioning */
+.face-U { grid-row: 1; grid-column: 2; }
+.face-L { grid-row: 2; grid-column: 1; }
+.face-F { grid-row: 2; grid-column: 2; }
+.face-R { grid-row: 2; grid-column: 3; }
+.face-B { grid-row: 2; grid-column: 4; }
+.face-D { grid-row: 3; grid-column: 2; }
+
+/* 
+  Face Grid: 
+  Smaller squares by default (mobile-first).
+*/
+.face-grid {
+  display: grid;
+  grid-template-rows: repeat(3, 30px);
+  grid-template-columns: repeat(3, 30px);
+  border: 2px solid #000;
+}
+
+.face-square {
+  border: 1px solid #000;
+  border-radius: var(--size-sm);
+  cursor: pointer;
+  transition: outline 0.15s ease-in-out, transform 0.15s ease-in-out;
+}
+.face-square:hover {
+  transform: scale(1.1);
+  outline: 2px solid #fff;
+}
+/* Add this to your CSS */
+.face-square.selected {
+  transform: scale(1.1);
+  outline: 3px solid var(--clr-rose);  /* or whatever highlight color you prefer */
+  transition: transform 0.15s ease-in-out, outline 0.15s ease-in-out;
+}
+
+
+/* -------------------------
+   Responsive Scaling:
+   xs >= 475px, sm >= 640px, 
+   lg >= 1024px, etc.
+------------------------- */
+
+/* xs >= 475px */
+@media (min-width: 475px) {
+  .face-grid {
+    grid-template-rows: repeat(3, 35px);
+    grid-template-columns: repeat(3, 35px);
+  }
+}
+
+/* sm >= 640px */
+@media (min-width: 640px) {
+  .face-grid {
+    grid-template-rows: repeat(3, 40px);
+    grid-template-columns: repeat(3, 40px);
+  }
+}
+
+/* lg >= 1024px */
+@media (min-width: 1024px) {
+  .face-grid {
+    grid-template-rows: repeat(3, 50px);
+    grid-template-columns: repeat(3, 50px);
+  }
+}
+
+/* xl >= 1280px */
+/* (You can continue to scale up if desired) */
+@media (min-width: 1280px) {
+  .face-grid {
+    grid-template-rows: repeat(3, 60px);
+    grid-template-columns: repeat(3, 60px);
+  }
+}
+
+
+/* ========================================================================== 
+   RESPONSIVE COLOR PALETTE
+   ========================================================================== */
+
+.color-palette {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  display: grid;
+  /* smaller default squares */
+  grid-template-columns: repeat(3, 20px);
+  grid-template-rows: repeat(2, 20px);
+  gap: 0.3rem;
+  z-index: 10;
+}
+
+.color-swatch {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #000;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: border 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+.color-swatch:hover {
+  border: 3px solid var(--clr-rose);
+  transform: scale(1.1);
+}
+
+
+/* 
+  Breakpoints for color palette:
+  - xs >= 475px
+  - sm >= 640px
+  - lg >= 1024px
+  - etc.
+*/
+
+/* xs >= 475px */
+@media (min-width: 475px) {
+  .color-palette {
+    grid-template-columns: repeat(3, 25px);
+    grid-template-rows: repeat(2, 25px);
+    gap: 0.4rem;
+  }
+  .color-swatch {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+/* sm >= 640px */
+@media (min-width: 640px) {
+  .color-palette {
+    grid-template-columns: repeat(3, 30px);
+    grid-template-rows: repeat(2, 30px);
+    gap: 0.5rem;
+  }
+  .color-swatch {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* lg >= 1024px */
+@media (min-width: 1024px) {
+  .color-palette {
+    grid-template-columns: repeat(3, 35px);
+    grid-template-rows: repeat(2, 35px);
+    gap: 0.5rem;
+  }
+  .color-swatch {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+/* xl >= 1280px */
+@media (min-width: 1280px) {
+  .color-palette {
+    grid-template-columns: repeat(3, 40px);
+    grid-template-rows: repeat(2, 40px);
+  }
+  .color-swatch {
+    width: 40px;
+    height: 40px;
+  }
+}

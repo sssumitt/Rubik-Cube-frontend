@@ -114,27 +114,6 @@ body::-webkit-scrollbar-thumb {
 }
 
 
-.form-container {
-  background-color: var(--clr-slate600);
-  padding: 1rem;
-  border-radius: 8px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 1rem;
-  align-items: center;
-}
-.form-container input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #444;
-  border-radius: 4px;
-  background-color: #1c1c1c;
-  color: #fff;
-}
-.form-container button {
-  white-space: nowrap;
-}
-
 /* ==========================================================================
    BUTTONS
    ========================================================================== */
@@ -250,18 +229,19 @@ body::-webkit-scrollbar-thumb {
   border: 1px solid #000;
   border-radius: var(--size-sm);
   cursor: pointer;
-  transition: outline 0.15s ease-in-out, transform 0.15s ease-in-out;
 }
+
+.face-square.selected {
+  transform: scale(2);
+  border: 3px solid var(--clr-light);
+}
+
 .face-square:hover {
   transform: scale(1.1);
   outline: 2px solid #fff;
 }
+
 /* Add this to your CSS */
-.face-square.selected {
-  transform: scale(1.1);
-  outline: 3px solid var(--clr-rose);  /* or whatever highlight color you prefer */
-  transition: transform 0.15s ease-in-out, outline 0.15s ease-in-out;
-}
 
 
 /* -------------------------
@@ -307,88 +287,48 @@ body::-webkit-scrollbar-thumb {
 /* ========================================================================== 
    RESPONSIVE COLOR PALETTE
    ========================================================================== */
+/* bottom‐of‐net color picker as 2×3 grid */
 
-.color-palette {
-  position: absolute;
-  bottom: 0.5rem;
-  right: 0.5rem;
+.bottom-palette {
   display: grid;
-  /* smaller default squares */
-  grid-template-columns: repeat(3, 20px);
-  grid-template-rows: repeat(2, 20px);
-  gap: 0.3rem;
-  z-index: 10;
+  grid-template-columns: repeat(3, var(--size-4xl));
+  grid-template-rows: repeat(2, var(--size-4xl));
+  gap: 8px;
+  justify-content: center;
+  margin: 16px auto;
 }
 
-.color-swatch {
-  width: 20px;
-  height: 20px;
-  border: 1px solid #000;
-  cursor: pointer;
+/* individual swatches */
+.swatch {
+  width: var(--size-4xl);
+  height: var(--size-4xl);
+  border: 2px solid #333;
   border-radius: 4px;
+  cursor: pointer;
   transition: border 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
-.color-swatch:hover {
-  border: 3px solid var(--clr-rose);
+.swatch:hover {
   transform: scale(1.1);
+  border-color: var(--clr-light);
 }
 
-
-/* 
-  Breakpoints for color palette:
-  - xs >= 475px
-  - sm >= 640px
-  - lg >= 1024px
-  - etc.
-*/
-
-/* xs >= 475px */
-@media (min-width: 475px) {
-  .color-palette {
-    grid-template-columns: repeat(3, 25px);
-    grid-template-rows: repeat(2, 25px);
-    gap: 0.4rem;
-  }
-  .color-swatch {
-    width: 25px;
-    height: 25px;
-  }
+/* highlight selected color */
+.swatch.selected {
+  transform: scale(1.1);
+  border: 3px solid var(--clr-light);
 }
 
-/* sm >= 640px */
-@media (min-width: 640px) {
-  .color-palette {
-    grid-template-columns: repeat(3, 30px);
-    grid-template-rows: repeat(2, 30px);
-    gap: 0.5rem;
-  }
-  .color-swatch {
-    width: 30px;
-    height: 30px;
-  }
+/* 2×6 rotation‐buttons grid */
+.rotation-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 8px;
 }
 
-/* lg >= 1024px */
-@media (min-width: 1024px) {
-  .color-palette {
-    grid-template-columns: repeat(3, 35px);
-    grid-template-rows: repeat(2, 35px);
-    gap: 0.5rem;
-  }
-  .color-swatch {
-    width: 35px;
-    height: 35px;
-  }
+/* Reset / Log buttons alignment */
+.action-btn {
+  min-width: 120px;
+  text-align: center;
 }
 
-/* xl >= 1280px */
-@media (min-width: 1280px) {
-  .color-palette {
-    grid-template-columns: repeat(3, 40px);
-    grid-template-rows: repeat(2, 40px);
-  }
-  .color-swatch {
-    width: 40px;
-    height: 40px;
-  }
-}

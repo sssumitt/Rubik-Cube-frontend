@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Info } from 'lucide-react';
 import Cube from "./Cube/cubie.jsx";
-
-
 import CubeStateEditor from "./Cube/CubeStateEditor.jsx";
 
 function App() {
@@ -29,9 +27,13 @@ function App() {
     >
       <h3 style={{ marginBottom: '1rem' }}>How to use the cube</h3>
       <ul style={{ paddingLeft: '1.2rem', marginBottom: '1rem' }}>
-        <li>Choose a layer by pressing a <strong>number</strong> (1 = top, 2 = middle, etc.).</li>
-        <li>Rotate by pressing a face letter <strong>(U/R/F/D/L/B)</strong>, with <strong>Shift</strong> for counter-clockwise.</li>
-
+        <li>
+          Choose a layer by pressing a <strong>number</strong> (1 = top, 2 = middle, etc.).
+        </li>
+        <li>
+          Rotate by pressing a face letter <strong>(U/R/F/D/L/B)</strong>, with{' '}
+          <strong>Shift</strong> for counter-clockwise.
+        </li>
       </ul>
       <button className="btn" onClick={() => setShowInfo(false)}>
         Close
@@ -55,12 +57,18 @@ function App() {
     />
   );
 
+  const dec = () => setCubeSize((s) => Math.max(2, s - 1));
+  const inc = () => setCubeSize((s) => s + 1);
+
   return (
     <>
-      <header className="hero container header-wrapper" style={{ position: 'relative' }}>
+      <header
+        className="hero container header-wrapper"
+        style={{ position: 'relative' }}
+      >
         <button
           className="info-button"
-          onClick={() => setShowInfo(prev => !prev)}
+          onClick={() => setShowInfo((prev) => !prev)}
           aria-label="Show instructions"
           style={{
             position: 'absolute',
@@ -75,7 +83,7 @@ function App() {
             cursor: 'pointer',
           }}
         >
-          <Info size={24} />
+          <Info size={20} />
         </button>
         <h1 className="hero__title">Rubik's Cube solver</h1>
       </header>
@@ -90,20 +98,50 @@ function App() {
       <main className="hero container">
         <Cube key={cubeSize} cubeSize={cubeSize} />
 
-        <div className="size-input-container">
-          <label htmlFor="cube-size" className='hero__subtitle'>
+        <div
+          className="size-input-container"
+          style={{
+            marginTop: '1rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+          }}
+        >
+          <label htmlFor="cube-size" className="hero__subtitle">
             Cube Size:
           </label>
+          <button
+            type="button"
+            onClick={dec}
+            aria-label="Decrease size"
+            style={{ padding: '0.2rem 0.6rem' }}
+          >
+            –
+          </button>
           <input
             id="cube-size"
             type="number"
             min="2"
+            step="1"
             value={cubeSize}
-            onChange={e => {
-              const v = parseInt(e.target.value, 10);
-              if (!isNaN(v) && v >= 2) setCubeSize(v);
+            readOnly
+            style={{
+              width: '3rem',
+              textAlign: 'center',
+              background: 'transparent',
+              border: '1px solid var(--clr-slate400)',
+              borderRadius: '0.25rem',
+              padding: '0.2rem',
             }}
           />
+          <button
+            type="button"
+            onClick={inc}
+            aria-label="Increase size"
+            style={{ padding: '0.2rem 0.6rem' }}
+          >
+            +
+          </button>
         </div>
       </main>
 

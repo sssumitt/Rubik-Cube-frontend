@@ -53,7 +53,7 @@ export default function CubeNetEditor() {
     });
 
     axios
-      .post(`http://localhost:5050/solve?state=${cubeStateStr}`)
+      .post(`https://rubik-cube-backend-production-e17c.up.railway.app/solve?state=${cubeStateStr}`)
       .then((response) => {
         // Set the output state to the response data.
         setOutput(response.data);
@@ -67,7 +67,7 @@ export default function CubeNetEditor() {
   // Test function to check connection to backend.
   const testConnection = () => {
     console.log("Testing connection to backend...");
-    fetch("http://localhost:5050/test")
+    fetch("https://rubik-cube-backend-production-e17c.up.railway.app/test")
       .then((response) => response.text())
       .then((data) => {
         console.log("Connection successful:", data);

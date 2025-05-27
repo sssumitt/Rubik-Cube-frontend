@@ -378,6 +378,7 @@ body::-webkit-scrollbar-thumb {
   margin-top: calc(var(--gap-size) * 2);
   display: flex;
   justify-content: center;
+  gap: 8px;   
 }
 .solve-btn {
   width: var(--solve-btn-w);

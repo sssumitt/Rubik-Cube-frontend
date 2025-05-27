@@ -246,13 +246,19 @@ export default function CubeNetEditor() {
                 onChange={e=>setMoveInput(e.target.value)}
               />
               <button className="btn action-btn" onClick={applyMoves}>Apply</button>
-              <button className="btn action-btn" onClick={()=>scrambleCube()}>Scramble</button>
-              <button className="btn action-btn" onClick={handleReset}>Reset</button>
+             
             </div>
           </div>
 
           {/* solve button down below */}
           <div className="action-down">
+             <button className="btn action-btn" onClick={()=>scrambleCube()}>Scramble</button>
+              <button className="btn action-btn" onClick={handleReset}>Reset</button>
+
+          </div>
+
+            <div className="action-down">
+  
             <button className="btn solve-btn" onClick={logCubeState}>Solve</button>
           </div>
 

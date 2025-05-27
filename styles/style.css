@@ -289,46 +289,107 @@ body::-webkit-scrollbar-thumb {
    ========================================================================== */
 /* bottom‐of‐net color picker as 2×3 grid */
 
-.bottom-palette {
-  display: grid;
-  grid-template-columns: repeat(3, var(--size-4xl));
-  grid-template-rows: repeat(2, var(--size-4xl));
-  gap: 8px;
-  justify-content: center;
-  margin: 16px auto;
+/* 1 ── more vertical space between the big blocks */
+:root {
+  /* cell sizes clamp between a min and max based on viewport width */
+  --cell-size: clamp(34px, 4vw, 60px);
+  --gap-size:  clamp(4px, 1vw, 10px);
+
+  /* action button sizes */
+  --small-btn-w: clamp(100px, 12vw, 140px);
+  --small-btn-h: clamp(28px, 3.5vw, 36px);
+  --solve-btn-w: clamp(160px, 20vw, 260px);
+  --solve-btn-h: clamp(36px, 4.5vw, 48px);
 }
 
-/* individual swatches */
+/* ─── layout tweaks ────────────────────────────────────────── */
+.cube-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--gap-size) * 3); /* triple the gap for big blocks */
+}
+
+/* spacing between moves & palette */
+.controls-top {
+  display: flex;
+  gap: calc(var(--gap-size) * 3);
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+/* ─── rotation buttons grid ───────────────────────────────── */
+.rotation-grid {
+  display: grid;
+  grid-template-columns: repeat(6, var(--cell-size));
+  grid-template-rows:    repeat(2, var(--cell-size));
+  gap: var(--gap-size);
+}
+
+/* each move button */
+.rotation-btn {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  font-size: clamp(.6rem, 1.2vw, .9rem);
+}
+
+/* ─── colour swatches ─────────────────────────────────────── */
+.bottom-palette {
+  display: grid;
+  grid-template-columns: repeat(3, var(--cell-size));
+  grid-template-rows:    repeat(2, var(--cell-size));
+  gap: var(--gap-size);
+}
+
+/* each swatch */
 .swatch {
-  width: var(--size-4xl);
-  height: var(--size-4xl);
+  width: var(--cell-size);
+  height: var(--cell-size);
   border: 2px solid #333;
   border-radius: 4px;
   cursor: pointer;
-  transition: border 0.2s ease-in-out, transform 0.2s ease-in-out;
+  transition: border .2s, transform .2s;
 }
-.swatch:hover {
-  transform: scale(1.1);
+.swatch:hover,
+.swatch.selected {
+  transform: scale(1.05);
   border-color: var(--clr-light);
 }
 
-/* highlight selected color */
-.swatch.selected {
-  transform: scale(1.1);
-  border: 3px solid var(--clr-light);
+/* ─── action buttons group ───────────────────────────────── */
+.actions-left button,
+.actions-left input {
+  height: var(--small-btn-h);
+}
+.actions-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;    
+}
+.actions-left .action-btn {
+  width: var(--small-btn-w);
+  max-width: none;
+  font-size: clamp(.7rem, 1.3vw, .9rem);
 }
 
-/* 2×6 rotation‐buttons grid */
-.rotation-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: repeat(2, auto);
-  gap: 8px;
+/* Solve button underneath */
+.action-down {
+  margin-top: calc(var(--gap-size) * 2);
+  display: flex;
+  justify-content: center;
 }
-
-/* Reset / Log buttons alignment */
-.action-btn {
-  min-width: 120px;
-  text-align: center;
+.solve-btn {
+  width: var(--solve-btn-w);
+  height: var(--solve-btn-h);
+  font-size: clamp(.9rem, 1.5vw, 1.2rem);
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform .15s, box-shadow .15s;
 }
-
+.solve-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}

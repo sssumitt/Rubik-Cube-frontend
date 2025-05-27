@@ -58,7 +58,7 @@ function App() {
   );
 
   const dec = () => setCubeSize((s) => Math.max(2, s - 1));
-  const inc = () => setCubeSize((s) => s + 1);
+  const inc = () => setCubeSize((s) => Math.min(9, s + 1));
 
   return (
     <>

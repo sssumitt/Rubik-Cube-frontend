@@ -136,6 +136,49 @@ body::-webkit-scrollbar-thumb {
     0 0 120px -10px var(--clr-rose);
 }
 
+/* center the header-content block */
+.header-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;  /* optional vertical padding */
+}
+
+/* place title + icon side by side */
+.header-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;          /* space between text and icon */
+  text-align: center;    /* for the multi-line h1 */
+}
+/* outer wrapper: holds both icon & centered content */
+.header-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* icon pinned top-left of wrapper */
+.info-button {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  color: var(--clr-light);
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* inner container already has centering logic */
+.hero.container {
+  display: flex;
+  justify-content: center;
+  /* you may have existing padding/margins here that keep it from touching the very edges */
+}
+
+
+
 
 /* ==============================
    Cube-Size Picker “Pill” Style

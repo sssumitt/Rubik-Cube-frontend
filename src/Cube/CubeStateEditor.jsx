@@ -266,9 +266,9 @@ export default function CubeNetEditor() {
       </div>
 
       {/* ─── display solution ─── */}
-      <div className="hero container" style={{marginTop:16}}>
+      <div className="hero container">
         <div className="hero__stitle">Solution:</div>
-        <div className="hero__subtitle">{output}</div>
+        <div className="hero__sstitle">{output}</div>
       </div>
     </div>
   );

@@ -62,31 +62,22 @@ function App() {
 
   return (
     <>
-      <header
-        className="hero container header-wrapper"
-        style={{ position: 'relative' }}
-      >
-        <button
-          className="info-button"
-          onClick={() => setShowInfo((prev) => !prev)}
-          aria-label="Show instructions"
-          style={{
-            position: 'absolute',
-            top: '1rem',
-            left: '1rem',
-            background: 'rgba(255, 255, 255, 0.1)',
-            border: 'none',
-            padding: '0.5rem',
-            borderRadius: '0.25rem',
-            zIndex: 10002,
-            color: 'var(--clr-light)',
-            cursor: 'pointer',
-          }}
-        >
-          <Info size={20} />
-        </button>
-        <h1 className="hero__title">Rubik's Cube solver</h1>
-      </header>
+    <header className="header-wrapper">
+  {/* Info button always lives at top‐left of this wrapper */}
+  <button
+    className="info-button"
+    onClick={() => setShowInfo(prev => !prev)}
+    aria-label="Show instructions"
+  >
+    <Info size={20}/>
+  </button>
+
+  {/* This inner “hero container” stays full-width & centers its children */}
+  <div className="hero container">
+    <h1 className="hero__title">Rubik's Cube Solver</h1>
+  </div>
+</header>
+
 
       {showInfo && (
         <>

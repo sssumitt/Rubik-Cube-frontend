@@ -150,7 +150,7 @@ export default function CubeNetEditor() {
       .map(f => cubeFaces[f].join(""))
       .join("");
     axios
-      .post(`https://rubik-cube-backend-production-e17c.up.railway.app/solve?state=${s}`)
+      .post(`https://rubik-cube-backend-wkss.onrender.com/solve?state=${s}`)
       .then(r=>setOutput(r.data));
   };
 

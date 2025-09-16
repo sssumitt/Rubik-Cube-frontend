@@ -1,0 +1,94 @@
+/* Navbar.css */
+
+/* Header styling */
+.navbar-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(7, 10, 19, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid #2a3a52;
+}
+
+/* Container inside header */
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+}
+
+/* Logo */
+.navbar-logo {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-logo span {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--clr-light);
+}
+
+/* Navigation links */
+.navbar-nav {
+  display: flex;
+  list-style: none;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.navbar-nav li {
+}
+
+.navbar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--clr-slate400);
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+}
+
+/* Hover effect for nav links */
+.navbar-link:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--clr-light);
+}
+
+/* Active nav link */
+.navbar-link.active-indigo {
+  background-color: var(--clr-indigo);
+  color: var(--clr-light);
+  box-shadow: 0 0 12px var(--clr-indigo);
+}
+
+.navbar-link.active-rose {
+  background-color: var(--clr-rose);
+  color: var(--clr-light);
+  box-shadow: 0 0 12px var(--clr-rose);
+}
+
+/* User profile */
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.navbar-user span {
+  color: var(--clr-light);
+  font-weight: 500;
+}
+
+.navbar-user img {
+  border-radius: 50%;
+  border: 2px solid var(--clr-indigo);
+}

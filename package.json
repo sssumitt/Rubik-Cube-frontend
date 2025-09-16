@@ -17,6 +17,7 @@
     "nodemon": "^3.1.9",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-router-dom": "^7.9.1",
     "three": "^0.174.0"
   },
   "devDependencies": {

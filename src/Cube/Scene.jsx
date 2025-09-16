@@ -1,65 +1,46 @@
-// initScene.js
+// src/components/Cube/Scene.js
+
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-// import Stats from 'three/examples/jsm/libs/stats.module';
 
 export function initScene(canvasId) {
-
   const scene = new THREE.Scene();
 
-  // Create the camera
   const camera = new THREE.PerspectiveCamera(
-    15, // Field of view
-    window.innerWidth / window.innerHeight*2, // Aspect ratio
-    10, // Near plane
-    10000 // Far plane
+    15,
+    window.innerWidth / window.innerHeight,
+    10,
+    10000
   );
+
   camera.position.z = 45;
-
-  // const axesHelper = new THREE.AxesHelper(16);
-  // scene.add(axesHelper);
-
   const ambientLight = new THREE.AmbientLight(0xffffff, 5);
   scene.add(ambientLight);
 
-
   const canvas = document.getElementById(canvasId);
-
-
   const renderer = new THREE.WebGLRenderer({
     canvas,
     antialias: true,
   });
+  renderer.setSize(window.innerWidth, window.innerHeight);
 
-  renderer.setSize(window.innerWidth , window.innerHeight/2);
-
-  
   const controls = new OrbitControls(camera, renderer.domElement);
+  // Improvement: Enable damping for smoother camera movement
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
 
-  // (Optional) Create a stats panel
-  // const stats = Stats();
-  // document.body.appendChild(stats.dom);
-
-
-  window.addEventListener('resize', onWindowResize, false);
-
-  function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight*2;
+  // Handle window resizing
+  const handleResize = () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth , window.innerHeight/2);
+    renderer.setSize(window.innerWidth, window.innerHeight);
   }
+  window.addEventListener('resize', handleResize);
 
-  const animate = () => {
-    requestAnimationFrame(animate);
-    controls.update();
-    // stats.update();
-    renderer.render(scene, camera);
+  // Return a cleanup function for the event listener
+  const cleanup = () => {
+    window.removeEventListener('resize', handleResize);
   };
 
-  animate();
-
-  return { scene, camera, renderer, controls };
-}
-export function createCanvas() {
-
+  return { scene, camera, renderer, controls, cleanup };
 }

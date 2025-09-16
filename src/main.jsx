@@ -1,15 +1,21 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import '../styles/style.css'
-import '../styles/utils.css'
-import '../styles/component/hero.css'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom'; // Import BrowserRouter
 
+// Your style imports
+import '../styles/style.css';
+import '../styles/utils.css';
+import '../styles/component/hero.css';
+import '../styles/modern-normalize.css';
 
-import '../styles/modern-normalize.css'
-import App from './App.jsx'
+import App from './App.jsx';
 
-createRoot(document.getElementById('root')).render(
+const root = createRoot(document.getElementById('root'));
 
-    <App />
-
-)
+root.render(
+  
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  
+);

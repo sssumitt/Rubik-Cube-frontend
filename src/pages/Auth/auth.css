@@ -1,0 +1,189 @@
+/* 🎨 Define a color palette using CSS variables */
+:root {
+  --background-start: #0f172a;
+  --background-end: #1e293b;
+  --card-background: rgba(30, 41, 59, 0.5);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --primary-accent: #818cf8;
+  --primary-accent-hover: #6366f1;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --input-background: #334155;
+  --input-border: #475569;
+}
+
+/* 💻 --- General Layout & Background --- */
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--background-start), var(--background-end));
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  padding: 1rem;
+}
+
+/* ✨ --- The Glassmorphism Card --- */
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--card-background);
+  padding: 2.5rem;
+  border-radius: 20px;
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 📝 --- Header & Typography --- */
+.auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-header h1 {
+  color: var(--text-primary);
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.auth-header p {
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+}
+
+/* ✍️ --- Form & Input Styling --- */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.form-group input {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background: var(--input-background);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input::placeholder {
+  color: #64748b;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary-accent);
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
+}
+
+/* 🔘 --- Buttons --- */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.btn-primary {
+  background: var(--primary-accent);
+  color: #1e293b;
+}
+
+.btn-primary:hover {
+  background: var(--primary-accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.btn-oauth {
+  background: #fff;
+  color: #111;
+  border: 1px solid #e2e8f0;
+  width: 100%;
+}
+
+.btn-oauth:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* ↔️ --- Separator & Toggle --- */
+.separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--text-secondary);
+  margin: 1.5rem 0;
+}
+
+.separator::before,
+.separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--input-border);
+}
+
+.separator:not(:empty)::before {
+  margin-right: .5em;
+}
+
+.separator:not(:empty)::after {
+  margin-left: .5em;
+}
+
+.toggle-form {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.toggle-form span {
+  color: var(--primary-accent);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.toggle-form span:hover {
+  text-decoration: underline;
+}

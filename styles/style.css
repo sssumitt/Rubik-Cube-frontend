@@ -123,13 +123,13 @@ body::-webkit-scrollbar {
   border-radius: 6px;
   transition: transform 0.2s ease-in-out;
 }
-.btn:hover {
+/* .btn:hover {
   transform: translateY(-3px);
   box-shadow: 
     0 14px 28px rgba(225, 29, 72, 0.25),
     0 10px 10px rgba(225, 29, 72, 0.22),
     0 0 120px -10px var(--clr-rose);
-}
+} */
 
 /* center the header-content block */
 .header-wrapper {

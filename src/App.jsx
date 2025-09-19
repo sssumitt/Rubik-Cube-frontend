@@ -11,7 +11,6 @@ import Auth from './pages/Auth/Auth';
 
 // Import BOTH route protection components
 import ProtectedRoute from './pages/ProtectedRoute';
-import PublicOnlyRoute from './pages/PublicOnlyRoute'; // <-- 1. IMPORT IT
 
 const NotFoundPage = () => (
     <div style={{ textAlign: 'center', marginTop: '50px' }}>
@@ -36,13 +35,10 @@ function App() {
       {showNavbar && <Navbar />}
       
       <Routes>
-        {/* ▼▼▼ 2. WRAP YOUR AUTH ROUTE ▼▼▼ */}
         <Route 
           path="/auth" 
           element={
-            <PublicOnlyRoute>
               <Auth />
-            </PublicOnlyRoute>
           } 
         />
         

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 
-const SOCKET_URL = "http://localhost:5000"; // Ensure this matches your server
+const SOCKET_URL = "https://rubik-cube-backend-multiplayer.onrender.com"; // Ensure this matches your server
 
 const SocketContext = createContext();
 

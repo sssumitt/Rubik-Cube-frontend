@@ -10,7 +10,7 @@ import { rotateFace } from "./Rotation/rotate";
 import { vertexShader } from "./Shaders/vertex";
 import { fragmentShader } from "./Shaders/fragment";
 
-const CubeWithArrow = ({ cubeSize = 12 }) => {
+const CubeWithArrow = ({ cubeSize = 3 }) => {
   const cubesRef = useRef([]);
   const isRotating = useRef(false);
 

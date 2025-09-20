@@ -11,6 +11,8 @@ import Auth from './pages/Auth/Auth';
 
 // Import BOTH route protection components
 import ProtectedRoute from './pages/ProtectedRoute';
+import TwoPlayerCubeView from './pages/MultiPlayer';
+import { SocketProvider } from './context/SocketContext';
 
 const NotFoundPage = () => (
     <div style={{ textAlign: 'center', marginTop: '50px' }}>
@@ -41,6 +43,7 @@ function App() {
               <Auth />
           } 
         />
+        <Route path='/multiPlayer' element={<ProtectedRoute><SocketProvider> <TwoPlayerCubeView/> </SocketProvider> </ProtectedRoute>} />
         
         {/* Your other protected routes remain the same */}
         <Route 

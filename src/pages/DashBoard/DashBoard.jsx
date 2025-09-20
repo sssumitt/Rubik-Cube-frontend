@@ -57,7 +57,7 @@ function DashboardPage() {
               <button className="btn btn-primary" onClick={() => navigate('/singlePlayer')}>
                 <Swords size={16} /> PLAY
               </button>
-              <button className="btn btn-secondary">
+              <button className="btn btn-secondary" onClick={() => navigate('/multiPlayer')}>
                 <Users size={16} /> MultiPlayer
               </button>
             </div>

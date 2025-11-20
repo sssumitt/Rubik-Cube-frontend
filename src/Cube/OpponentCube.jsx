@@ -7,7 +7,7 @@ import { rotateFace } from "./Rotation/rotate";
 import { vertexShader } from "./Shaders/vertex";
 import { fragmentShader } from "./Shaders/fragment";
 
-// A simplified, "dumb" cube component without the Arrow HUD
+// A simplified, cube component without the Arrow HUD
 const OpponentCube = forwardRef(({ cubeSize = 3, canvasId }, ref) => {
   const cubesRef = useRef([]);
   const sceneRef = useRef(null);
@@ -35,6 +35,7 @@ const OpponentCube = forwardRef(({ cubeSize = 3, canvasId }, ref) => {
     const tolerance = spacing / 1000;
 
     // --- Main Cube Scene Setup ---
+    // NOTE: Ensure your initScene function uses container.clientWidth/Height, not window.innerWidth
     const { scene: cubeScene, camera: cubeCamera, renderer: cubeRenderer, controls, cleanup: cleanupScene } = initScene(canvasId);
     sceneRef.current = cubeScene;
 
@@ -66,9 +67,21 @@ const OpponentCube = forwardRef(({ cubeSize = 3, canvasId }, ref) => {
     };
   }, [cubeSize, canvasId]);
 
-  // Render the canvas with the unique ID passed in from the parent.
-  return <canvas id={canvasId} style={{ width: "100%", height: "100%" }} />;
+  // --- FIX IS HERE ---
+  return (
+    <canvas 
+      id={canvasId} 
+      style={{ 
+        display: "block",       // Removes the 4px bottom gap (inline-block fix)
+        position: "absolute",   // Takes canvas out of flow to prevent pushing parent
+        top: 0,
+        left: 0,
+        width: "100%", 
+        height: "100%",
+        outline: "none"         // Removes selection highlight
+      }} 
+    />
+  );
 });
 
 export default OpponentCube;
-

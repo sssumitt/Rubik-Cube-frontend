@@ -4,11 +4,24 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 export function initScene(canvasId) {
+  const canvas = document.getElementById(canvasId);
+  
+  if (!canvas) {
+    console.error(`Canvas with id ${canvasId} not found`);
+    return {};
+  }
+
+  // FIX 1: Get dimensions from the parent container, NOT the window
+  const container = canvas.parentElement;
+  const width = container ? container.clientWidth : window.innerWidth;
+  const height = container ? container.clientHeight : window.innerHeight;
+
   const scene = new THREE.Scene();
 
+  // FIX 2: Use container dimensions for Aspect Ratio
   const camera = new THREE.PerspectiveCamera(
     15,
-    window.innerWidth / window.innerHeight,
+    width / height,
     10,
     10000
   );
@@ -17,29 +30,28 @@ export function initScene(canvasId) {
   const ambientLight = new THREE.AmbientLight(0xffffff, 5);
   scene.add(ambientLight);
 
-  const canvas = document.getElementById(canvasId);
+  // FIX 3: Enable alpha (optional, but helps with background blending)
   const renderer = new THREE.WebGLRenderer({
     canvas,
-    antialias: true,
+    antialias: true
+    // alpha: true 
   });
-  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  // FIX 4: Set initial size to container size
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Sharpness fix
 
   const controls = new OrbitControls(camera, renderer.domElement);
-  // Improvement: Enable damping for smoother camera movement
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
 
-  // Handle window resizing
-  const handleResize = () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  }
-  window.addEventListener('resize', handleResize);
+  // NOTE: We REMOVED the window.addEventListener('resize') here.
+  // Your React components (CubeWithArrow/OpponentCube) now handle resizing 
+  // via the ResizeObserver you added previously. This prevents conflicts.
 
-  // Return a cleanup function for the event listener
   const cleanup = () => {
-    window.removeEventListener('resize', handleResize);
+    controls.dispose();
+    // No event listener to remove since we delegated that to the React component
   };
 
   return { scene, camera, renderer, controls, cleanup };

@@ -1,11 +1,11 @@
 // src/components/Cube/Scene.js
 
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { ArcballControls } from 'three/examples/jsm/controls/ArcballControls';
 
 export function initScene(canvasId) {
   const canvas = document.getElementById(canvasId);
-  
+
   if (!canvas) {
     console.error(`Canvas with id ${canvasId} not found`);
     return {};
@@ -20,9 +20,9 @@ export function initScene(canvasId) {
 
   // FIX 2: Use container dimensions for Aspect Ratio
   const camera = new THREE.PerspectiveCamera(
-    15,
+    45, // Increased FOV slightly for better arcball feel
     width / height,
-    10,
+    0.1,
     10000
   );
 
@@ -41,9 +41,11 @@ export function initScene(canvasId) {
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Sharpness fix
 
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.05;
+  const controls = new ArcballControls(camera, renderer.domElement, scene);
+  controls.enableAnimations = true; // Enable damping/animations
+  controls.dampingFactor = 10; // Arcball damping is different
+  controls.wMax = 12; // Angular velocity limit
+  controls.setGizmosVisible(false); // Hide the axis overlay
 
   // NOTE: We REMOVED the window.addEventListener('resize') here.
   // Your React components (CubeWithArrow/OpponentCube) now handle resizing 

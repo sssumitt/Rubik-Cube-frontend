@@ -1,6 +1,6 @@
 import axios from "axios";
-// const BASE_URL = "https://rubik-cube-backend-multiplayer.onrender.com/api/auth";
-const BASE_URL = "http://localhost:5000/api/auth";
+const BASE_URL = "https://rubik-cube-backend-multiplayer.onrender.com/api/auth";
+// const BASE_URL = "http://localhost:5000/api/auth";
 
 const api = axios.create({
   baseURL: BASE_URL,

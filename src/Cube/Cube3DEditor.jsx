@@ -61,8 +61,8 @@ const Cube3DEditor = forwardRef(({ cubeSize = 3, selectedColor, isPaintMode, onC
             let uAxis, vAxis;
             if (face.name === "U") { uAxis = new THREE.Vector3(1, 0, 0); vAxis = new THREE.Vector3(0, 0, 1); }
             else if (face.name === "D") { uAxis = new THREE.Vector3(1, 0, 0); vAxis = new THREE.Vector3(0, 0, -1); }
-            else if (face.name === "L") { uAxis = new THREE.Vector3(0, 0, -1); vAxis = new THREE.Vector3(0, -1, 0); }
-            else if (face.name === "R") { uAxis = new THREE.Vector3(0, 0, 1); vAxis = new THREE.Vector3(0, -1, 0); }
+            else if (face.name === "L") { uAxis = new THREE.Vector3(0, 0, 1); vAxis = new THREE.Vector3(0, -1, 0); }
+            else if (face.name === "R") { uAxis = new THREE.Vector3(0, 0, -1); vAxis = new THREE.Vector3(0, -1, 0); }
             else if (face.name === "F") { uAxis = new THREE.Vector3(1, 0, 0); vAxis = new THREE.Vector3(0, -1, 0); }
             else if (face.name === "B") { uAxis = new THREE.Vector3(-1, 0, 0); vAxis = new THREE.Vector3(0, -1, 0); }
 

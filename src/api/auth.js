@@ -1,10 +1,10 @@
 import axios from "axios";
-const BASE_URL = "https://rubik-cube-backend-multiplayer.onrender.com/auth";
-// const BASE_URL = "http://localhost:5000/auth";
+// const BASE_URL = "https://rubik-cube-backend-multiplayer.onrender.com/api/auth";
+const BASE_URL = "http://localhost:5000/api/auth";
 
 const api = axios.create({
   baseURL: BASE_URL,
-  withCredentials: true, 
+  withCredentials: true,
 });
 
 let csrfToken = null;
@@ -70,7 +70,7 @@ export const loginUser = async (credentials) => {
 
 export const logoutUser = async () => {
   const response = await api.post("/logout");
-  csrfToken = null; 
+  csrfToken = null;
   return response;
 };
 

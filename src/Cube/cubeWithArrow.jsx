@@ -8,25 +8,39 @@ import { rotateFace } from "./Rotation/rotate";
 import { vertexShader } from "./Shaders/vertex";
 import { fragmentShader } from "./Shaders/fragment";
 
-const CubeWithArrow = forwardRef(({ cubeSize = 3, canvasId }, ref) => {
-  const mountRef = useRef(null); // Reference to the parent DIV
+const CubeWithArrow = forwardRef(({ cubeSize = 3, canvasId, disableKeyboard = false }, ref) => {
+  const mountRef = useRef(null); // Reference to the wrapper div
   const cubesRef = useRef([]);
   const sceneRef = useRef(null);
   const isRotating = useRef(false);
-  const canvasRef = useRef(null); // Reference to the Main Cube Canvas
+  const canvasRef = useRef(null);
 
-  // --- 1. Restore Game Control Logic (Required for Socket) ---
+  // Expose performMove to parent (TwoPlayerCubeView)
   useImperativeHandle(ref, () => ({
     performMove: (move) => {
-      const { face, sliceIndex, clockwise } = move;
+      const { face, sliceIndex, clockwise, duration } = move;
       const spacing = 1.001;
       const centerIndex = (cubeSize - 1) / 2;
       const outerPos = centerIndex * spacing;
       const tolerance = spacing / 1000;
-      
+
       if (sceneRef.current) {
-         rotateFace(face, sliceIndex, cubesRef.current, sceneRef.current, outerPos, spacing, tolerance, getCubesForSlice, isRotating, clockwise);
+        // IMPORTANT: Return promise for async/await in parent
+        return rotateFace(
+          face,
+          sliceIndex,
+          cubesRef.current,
+          sceneRef.current,
+          outerPos,
+          spacing,
+          tolerance,
+          getCubesForSlice,
+          isRotating,
+          clockwise,
+          duration // Pass custom duration
+        );
       }
+      return Promise.resolve();
     }
   }));
 
@@ -36,11 +50,13 @@ const CubeWithArrow = forwardRef(({ cubeSize = 3, canvasId }, ref) => {
     const outerPos = centerIndex * spacing;
     const tolerance = spacing / 1000;
 
-    // --- 2. Main Cube Scene Setup ---
+    // --- Main Scene ---
+    // Initialize the main Three.js scene for the cube
     const { scene: cubeScene, camera: cubeCamera, renderer: cubeRenderer, controls, cleanup: cleanupScene } = initScene(canvasId);
     sceneRef.current = cubeScene;
 
-    // --- 3. Resize Logic (Keeps cube centered in card) ---
+    // --- Resize Logic ---
+    // Keeps the 3D camera synced with the wrapper div's size
     const handleResize = () => {
       const container = mountRef.current;
       if (container && cubeCamera && cubeRenderer) {
@@ -54,7 +70,8 @@ const CubeWithArrow = forwardRef(({ cubeSize = 3, canvasId }, ref) => {
     const resizeObserver = new ResizeObserver(() => handleResize());
     if (mountRef.current) resizeObserver.observe(mountRef.current);
 
-    // --- 4. Cube Geometry ---
+    // --- Geometry ---
+    // Create the individual cubies
     const cubes = createRubiksCube(
       cubeSize, centerIndex, spacing, outerPos, tolerance,
       { W: 0xffffff, R: 0xff0000, Y: 0xffff00, O: 0xffa500, G: 0x00ff00, B: 0x0000ff },
@@ -65,25 +82,26 @@ const CubeWithArrow = forwardRef(({ cubeSize = 3, canvasId }, ref) => {
     cubeScene.add(cubeGroup);
     cubesRef.current = cubes;
 
-    // --- 5. Arrow HUD Setup ---
-    const arrowSize = 100; // Slightly smaller to fit nicely
+    // --- Arrow HUD ---
+    // Initialize the separate scene for the orientation arrows
+    const arrowSize = 100;
     const { scene: arrowScene, camera: arrowCamera, renderer: arrowRenderer, arrowGroup } = initAxesScene(arrowSize);
-    
-    // CRITICAL FIX: Append to the component's container, NOT document.body
+
+    // Append Arrow Canvas to the Wrapper Div
     if (mountRef.current) {
-        mountRef.current.appendChild(arrowRenderer.domElement);
+      mountRef.current.appendChild(arrowRenderer.domElement);
     }
 
-    // CRITICAL FIX: Style the Arrow Canvas to sit in the bottom-left of the wrapper
+    // Style the Arrow Canvas (Bottom-Left of Wrapper)
     arrowRenderer.domElement.style.position = "absolute";
     arrowRenderer.domElement.style.bottom = "10px";
     arrowRenderer.domElement.style.left = "10px";
-    arrowRenderer.domElement.style.zIndex = "10"; // Ensure it sits ON TOP of the main cube
-    arrowRenderer.domElement.style.pointerEvents = "none"; // Click-through to main canvas
+    arrowRenderer.domElement.style.zIndex = "10";
+    arrowRenderer.domElement.style.pointerEvents = "none"; // Allow clicks to pass through
 
-    // --- 6. Keyboard Controls (Local) ---
+    // --- Local Keyboard Controls ---
     let currentSlice = null;
-    const digitMapping = { "1":"1","!":"1","2":"2","@":"2","3":"3","#":"3","4":"4","$":"4","5":"5","%":"5","6":"6","^":"6","7":"7","&":"7","8":"8","*":"8","9":"9","(":"9" };
+    const digitMapping = { "1": "1", "!": "1", "2": "2", "@": "2", "3": "3", "#": "3", "4": "4", "$": "4", "5": "5", "%": "5", "6": "6", "^": "6", "7": "7", "&": "7", "8": "8", "*": "8", "9": "9", "(": "9" };
 
     const handleKeyDown = (e) => {
       if (digitMapping[e.key]) {
@@ -94,19 +112,22 @@ const CubeWithArrow = forwardRef(({ cubeSize = 3, canvasId }, ref) => {
         const face = e.key.toUpperCase();
         const sliceIndex = currentSlice !== null ? currentSlice : 0;
         const clockwise = !e.shiftKey;
+        // Local moves trigger default duration
         rotateFace(face, sliceIndex, cubesRef.current, cubeScene, outerPos, spacing, tolerance, getCubesForSlice, isRotating, clockwise);
         currentSlice = null;
       }
     };
-    window.addEventListener("keydown", handleKeyDown);
 
-    // --- 7. Animation Loop ---
+    if (!disableKeyboard) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+
+    // --- Animation Loop ---
     const animate = (t) => {
       requestAnimationFrame(animate);
       TWEEN.update(t);
       controls.update();
-
-      // Sync Arrow rotation
+      // Sync Arrow Orientation with Main Camera
       arrowGroup.quaternion.copy(cubeCamera.quaternion).invert();
 
       cubeRenderer.render(cubeScene, cubeCamera);
@@ -114,7 +135,6 @@ const CubeWithArrow = forwardRef(({ cubeSize = 3, canvasId }, ref) => {
     };
     const animationFrameId = requestAnimationFrame(animate);
 
-    // --- Cleanup ---
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       cancelAnimationFrame(animationFrameId);
@@ -122,39 +142,35 @@ const CubeWithArrow = forwardRef(({ cubeSize = 3, canvasId }, ref) => {
       cleanupScene();
       cubeRenderer.dispose();
       arrowRenderer.dispose();
-      
-      // Remove Arrow Canvas from the specific container
+      // Manually remove arrow canvas
       if (arrowRenderer.domElement.parentElement) {
         arrowRenderer.domElement.remove();
       }
     };
   }, [cubeSize, canvasId]);
 
-  // --- 8. JSX Structure ---
-  // We return a Div Wrapper (Relative) containing the Main Canvas (Absolute)
-  // The Arrow Canvas is appended dynamically inside this Div by the useEffect
   return (
-    <div 
-      ref={mountRef} 
-      style={{ 
-        position: 'relative', // Establishes boundary for absolute children
-        width: '100%', 
+    <div
+      ref={mountRef}
+      style={{
+        position: 'relative', // Establishes context for absolute children
+        width: '100%',
         height: '100%',
-        overflow: 'hidden' 
+        overflow: 'hidden'
       }}
     >
-      <canvas 
+      <canvas
         ref={canvasRef}
-        id={canvasId} 
-        style={{ 
-            display: "block",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%", 
-            height: "100%",
-            outline: "none",
-            zIndex: 1 
+        id={canvasId}
+        style={{
+          display: "block",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          outline: "none",
+          zIndex: 1
         }}
       />
     </div>

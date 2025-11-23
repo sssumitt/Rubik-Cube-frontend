@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { User, Trophy, BarChart, Timer, Swords, Users, Crown, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { getDashboardData } from '../../api/stats';
+import { useAuth } from '../../context/AuthContext';
 import './DashBoardPage.css';
-
-const leaderboardData = [ /* ... */ ];
-const recentMatchesData = [ /* ... */ ];
 
 const StatItem = ({ icon: Icon, label, value }) => (
   <div className="stat-item">
@@ -17,6 +16,31 @@ const Card = ({ children }) => <div className="card">{children}</div>;
 
 function DashboardPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const [stats, setStats] = useState({ rank: '-', solves: 0, bestTime: '-', avgTime: '-' });
+  const [recentMatches, setRecentMatches] = useState([]);
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getDashboardData();
+        console.log("Dashboard Data Received:", data);
+        setStats(data.stats);
+        setRecentMatches(data.recentMatches);
+        setLeaderboard(data.leaderboard);
+      } catch (err) {
+        console.error("Failed to fetch dashboard data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) return <div style={{ textAlign: 'center', marginTop: '2rem' }}>Loading stats...</div>;
 
   return (
     <div className="dashboard-container">
@@ -34,17 +58,17 @@ function DashboardPage() {
               My Profile
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-              <img src="https://placehold.co/64x64/4f46e5/f1f5f9?text=P1" alt="Player Avatar" className="avatar-large" />
+              <img src={`https://placehold.co/64x64/4f46e5/f1f5f9?text=${user?.username?.charAt(0).toUpperCase() || 'U'}`} alt="Player Avatar" className="avatar-large" />
               <div>
-                <h2 style={{ fontSize: 'var(--size-xl)', color: 'var(--clr-light)' }}>Player_One</h2>
+                <h2 style={{ fontSize: 'var(--size-xl)', color: 'var(--clr-light)' }}>{user?.username || 'Player'}</h2>
                 <p style={{ color: '#22c55e', fontSize: 'var(--size-sm)', fontWeight: 'bold' }}>● Online</p>
               </div>
             </div>
             <div className="stats-grid">
-              <StatItem icon={Trophy} label="Rank" value="#1,204" />
-              <StatItem icon={BarChart} label="Solves" value="287" />
-              <StatItem icon={Timer} label="Best" value="11.45s" />
-              <StatItem icon={Timer} label="Avg" value="14.82s" />
+              <StatItem icon={Trophy} label="Rank" value={`#${stats.rank}`} />
+              <StatItem icon={BarChart} label="Wins" value={stats.solves} />
+              <StatItem icon={Timer} label="Best" value={stats.bestTime} />
+              <StatItem icon={Timer} label="Avg" value={stats.avgTime} />
             </div>
           </Card>
 
@@ -71,20 +95,21 @@ function DashboardPage() {
               <Activity size={20} color="var(--clr-indigo)" />
               Recent Matches
             </div>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {recentMatchesData.map((match, i) => (
-                <li key={i} className={`recent-match ${match.result.toLowerCase()}`}>
-                  <span>{match.opponent}</span>
-                  <div style={{ textAlign: 'center' }}>
-                    <span>{match.result}</span>
-                    <div style={{ color: 'var(--clr-slate400)', fontFamily: 'monospace', fontSize: 'var(--size-sm)' }}>
-                      {match.time} vs {match.opponentTime}
+            {recentMatches.length === 0 ? (
+              <p style={{ color: 'var(--clr-slate400)', textAlign: 'center', padding: '1rem' }}>No recent matches found.</p>
+            ) : (
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                {recentMatches.map((match, i) => (
+                  <li key={i} className={`recent-match ${match.result.toLowerCase() === 'won' ? 'won' : 'lost'}`}>
+                    <div className="match-info">
+                      <span className="match-opponent">vs {match.opponent}</span>
+                      <span className="match-date">{new Date(match.date).toLocaleDateString()}</span>
                     </div>
-                  </div>
-                  <button style={{ justifySelf: 'end', padding: '0.25em 0.75em', fontSize: 'var(--size-sm)', background: 'var(--clr-slate400)', borderRadius: '4px' }}>Details</button>
-                </li>
-              ))}
-            </ul>
+                    <span className="match-result">{match.result}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </Card>
 
           <Card>
@@ -93,16 +118,16 @@ function DashboardPage() {
               Global Leaderboard
             </div>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {leaderboardData.map(player => (
+              {leaderboard.map(player => (
                 <li key={player.rank} className={`leaderboard-item ${player.you ? 'you' : ''}`}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <span style={{ color: 'var(--clr-slate400)', fontStyle: 'italic', minWidth: '2ch', textAlign: 'center' }}>#{player.rank}</span>
+                  <div className="player-info">
+                    <span className="rank-badge">#{player.rank}</span>
                     <img src={`https://placehold.co/32x32/1e293b/f1f5f9?text=${player.name.charAt(0)}`} alt={`${player.name} avatar`} className="avatar-small" />
-                    <span style={{ color: 'var(--clr-light)', fontWeight: '500' }}>{player.name}</span>
+                    <span className="player-name">{player.name}</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     {player.rank === 1 && <Crown size={16} color="#facc15" />}
-                    <span style={{ color: 'var(--clr-rose)', fontWeight: 'bold', fontFamily: 'monospace' }}>{player.time}</span>
+                    <span className="score-display">{player.time}</span>
                   </div>
                 </li>
               ))}
